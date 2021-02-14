@@ -1,0 +1,58 @@
+﻿using DataAccess.Abstract;
+using Entities.Concrete;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace DataAccess.Concrete.InMemory
+{
+    public class InMemoryCarDal : ICarDal
+    {
+        List<Car> _cars;
+
+        public InMemoryCarDal()
+        {
+            _cars = new List<Car> {
+                new Car{Id=1,BrandId=1,ColorId=1,DailyPrice=650,Description="BMW 530i",ModelYear=2018},
+                 new Car{Id=1,BrandId=1,ColorId=2,DailyPrice=800,Description="BMW 740Li",ModelYear=2020},
+                 new Car{Id=2,BrandId=2,ColorId=1,DailyPrice=150,Description="Peugeot 301",ModelYear=2016},
+                  new Car{Id=3,BrandId=3,ColorId=2,DailyPrice=600,Description="Mercedes-Benz E180",ModelYear=2017},
+                   new Car{Id=4,BrandId=4,ColorId=3,DailyPrice=300,Description="Peugeot 3008",ModelYear=2018},
+            };
+
+        }
+
+        public void Add(Car car)
+        {
+            _cars.Add(car);
+        }
+
+        public void Delete(Car car)
+        {
+            Car carsToDelete = _cars.SingleOrDefault(c => c.BrandId == car.BrandId);
+            _cars.Remove(car);
+        }
+
+        public List<Car> GetAll()
+        {
+            return _cars;
+        }
+
+        public List<Car> GetById(int carId)
+        {
+            return _cars.Where(c => c.BrandId == carId).ToList();
+        }
+
+        public void Update(Car car)
+        {
+            Car carsToUpdate = _cars.SingleOrDefault(c => c.BrandId == car.BrandId);
+            carsToUpdate.BrandId = car.BrandId;
+            carsToUpdate.ColorId = car.ColorId;
+            carsToUpdate.DailyPrice = car.DailyPrice;
+            carsToUpdate.Description = car.Description;
+            carsToUpdate.ModelYear = car.ModelYear;
+            carsToUpdate.Id = car.Id;
+        }
+    }
+}
