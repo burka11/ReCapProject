@@ -1,37 +1,25 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfBrandDal : IBrandDal
+    public class EfBrandDal : EfEntityRepositoryBase<Brand,RentACarContext>,IBrandDal
     {
-        public void Add(Brand entity)
+        public List<BrandDetailDto> GetBrandDetails()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Brand entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Brand Get(Expression<Func<Brand, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Brand> GetAll(Expression<Func<Brand, bool>> filter = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Brand entity)
-        {
-            throw new NotImplementedException();
+            using (RentACarContext context = new RentACarContext())
+            {
+                //var result =from p in context.Products join c in context.Categories on p.CategoryId equals c.CategoryId select new ProductDetailDto {ProductId=p.ProductId,ProductName=p.ProductName,CategoryName=c.CategoryName,UnitsInStock=p.UnitsInStock };
+                var result = from b in context.Brands join c in context.Cars on b.Id equals c.BrandId select new BrandDetailDto { };
+                return result.ToList();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,56 +11,21 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car,RentACarContext>, ICarDal
     {
-        public void Add(Car car)
+        public List<CarDetailDto> GetCarDetails()
         {
-            using (RentACarContext context = new RentACarContext())
+            using (RentACarContext context= new RentACarContext()) 
             {
-                var addedEntity = context.Entry(car);
-                addedEntity.State = EntityState.Added;
-                Save(context);
-            }
-        }
-        private static void Save(RentACarContext context)
-        {
-            context.SaveChanges();
-        }
+                // var result = from c in context.Cars join b in context.Brands on c.BrandId equals b.BrandId select new CarDetailDto { };
+                var result = from c in context.Cars join b in context.Brands on c.BrandId equals b.BrandId join clr in context.Colors on c.ColorId equals clr.ColorId select new CarDetailDto { BrandName = b.Name,CarName=c.Description,ColorName=clr.Name,DailyPrice=c.DailyPrice };                     
 
-        public void Delete(Car car)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                var deletedEntity = context.Entry(car);
-                deletedEntity.State = EntityState.Deleted;
-                Save(context);
+                return result.ToList();
             }
-        }
+            //var result = from b in context.Brands join c in context.Cars on b.Id equals c.BrandId select new BrandDetailDto { };
+           // return result.ToList();
 
-        public Car Get(Expression<Func<Car, bool>> filter)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                return context.Set<Car>().SingleOrDefault(filter);
-            }
-        }
-
-        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                return filter == null ? context.Set<Car>().ToList() : context.Set<Car>().Where(filter).ToList();
-            }
-        }
-
-        public void Update(Car car)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                var deletedEntity = context.Entry(car);
-                deletedEntity.State = EntityState.Modified;
-                Save(context);
-            }
+            
         }
     }
 }
