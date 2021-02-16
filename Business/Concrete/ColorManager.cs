@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Results;
+using Core.Results.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTO;
@@ -18,33 +21,34 @@ namespace Business.Concrete
         }
 
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
             _colorDal.Add(color);
+            return new SuccessResult(CarMessages.CarAdded);
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
-            _colorDal.Delete(color);
+            throw new NotImplementedException();
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
         }
 
-        public List<ColorDetailDto> GetColorDetails()
+        public IDataResult<List<ColorDetailDto>> GetColorDetails()
         {
-            return _colorDal.GetColorDetails();
+            return new SuccessDataResult<List<ColorDetailDto>>(_colorDal.GetColorDetails(),CarMessages.CarsListed);
         }
-        public List<Color> GetColorsByColorId(int id)
+        public IDataResult<List<Color>> GetColorsByColorId(int id)
         {
-            return _colorDal.GetAll(c => c.Id == id);
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(c => c.Id == id));
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
-            _colorDal.Update(color);
+            throw new NotImplementedException();
         }
     }
 }

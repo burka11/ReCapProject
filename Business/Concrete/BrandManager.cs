@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Results;
+using Core.Results.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTO;
@@ -16,34 +19,35 @@ namespace Business.Concrete
         {
             _brandDal=brandal;
         }
-        public void Add(Brand brand)
+        public IResult Add(Brand brand)
         {
             _brandDal.Add(brand);
+            return new SuccessResult(CarMessages.CarAdded);
         }
 
-        public void Delete(Brand brand)
+        public IResult Delete(Brand brand)
         {
-            _brandDal.Delete(brand);
+            throw new NotImplementedException();
         }
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>> GetAll()
         {
-           return _brandDal.GetAll();
+           return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
         }
 
-        public List<BrandDetailDto> GetBrandDetails()
+        public IDataResult<List<BrandDetailDto>> GetBrandDetails()
         {
-            return _brandDal.GetBrandDetails();
+            return new SuccessDataResult<List<BrandDetailDto>>(_brandDal.GetBrandDetails(), CarMessages.CarsListed);
         }
 
-        public List<Brand> GetBrandsByBrandId(int id)
+        public IDataResult<List<Brand>> GetBrandsByBrandId(int id)
         {
-            return _brandDal.GetAll(b => b.Id == id);
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(b => b.Id == id));
         }
 
-        public void Update(Brand brand)
+        public IResult Update(Brand brand)
         {
-            _brandDal.Update(brand);
+            throw new NotImplementedException();
         }
     }
 }
