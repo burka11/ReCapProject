@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspect.Autofac.Validation;
 using Core.Results;
 using Core.Results.Abstract;
 using DataAccess.Abstract;
@@ -18,27 +20,14 @@ namespace Business.Concrete
         {
             _carRentalDal = carRentalDal;
         }
+
+        [ValidationAspect(typeof(CarRentalValidator))]
         public IResult Add(CarRental rental)
         {
-            if (rental.RentDate >= DateTime.Now.Date)
-            {
-                if (rental.ReturnDate <= DateTime.Now.Date)
-                {
-                    _carRentalDal.Add(rental);
 
-                    return new SuccessResult(CarRentalMessages.CarRentAdded);
+            _carRentalDal.Add(rental);
 
-                }
-                else
-                {
-                    return new SuccessResult(CarRentalMessages.CarRentNameInvalid);
-                }
-
-            }
-            else
-            {
-                return new SuccessResult(CarRentalMessages.CarRentNameInvalid);
-            }
+            return new SuccessResult(CarRentalMessages.CarRentAdded);
 
 
         }

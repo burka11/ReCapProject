@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspect.Autofac.Validation;
 using Core.Results;
 using Core.Results.Abstract;
 using DataAccess.Abstract;
@@ -22,18 +24,12 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.Description.Length < 2 || car.DailyPrice == 0)
-            {
-                return new ErrorResult(CarMessages.CarNameInvalid);
-            }
-            else
-            {
-                _carDal.Add(car);
-                return new SuccessResult(CarMessages.CarAdded);
 
-            }
+            _carDal.Add(car);
+            return new SuccessResult(CarMessages.CarAdded);
         }
 
         public IResult Delete(Car car)

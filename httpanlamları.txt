@@ -1,0 +1,18 @@
+200 (OK) ➡ İstek başarılı bir şekilde gerçekleşti.
+201 (Created) ➡ İstek başarılı oldu ve bunun sonucunda yeni bir kaynak oluştuğunu belirtir.
+301 Moved Permanently ➡ İstekte bulunan kaynağın url'nin değiştiğini belirtir ve yönlendirir. 
+400 Bad Request ➡ Sunucu isteğin hatalı olduğunu belirtir ve isteği işleyemez.
+401 Unathorized ➡ Kimlik doğrulamasının yapılamadığını belirtir. 'Yetkisiz' olarak isimlendirilir.
+403 Forbidden ➡ İsteğin yapıldığı kişi/program erişim hakkına sahip değil veya yetkisi yok bu yüzden de sunucu isteği görüntülemeyi reddeder. 401 den farklı olarak istemcinin kimliği sunucu tarafından bilinir.
+404 Not Found ➡ Belirtilen kaynağın bulunamadığını belirtir. Tarayıcının belirtilen URL'i tanımadığı anlamını taşır. 
+500 Internal Server Error ➡ Sunucu, nasıl başa çıkacağını bilmediği bir durumla karşılaşınca ortaya çıkar.
+502 Bad Gateaway ➡ Ağ geçidinden veya proxyden geçen bir işlemin geçersiz yanıt alması sonucunda oluşur.
+
+200 istek başarılı oldu
+201 oluşturma başarılı
+301 kalıcı yönlendirme
+400 kötü istek (sunucu syntax ı anlamadı)
+403 istek gönderilen sunucuda sorgular yasak yada private
+404 sunucu istekte bulunulan sayfayı bulamadı
+500 sunucu tarafı işlemlerde bir problem var
+502 sunucular arası veri alışverişinden kaynaklanan kopmalar

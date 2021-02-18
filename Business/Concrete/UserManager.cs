@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspect.Autofac.Validation;
 using Core.Results;
 using Core.Results.Abstract;
 using DataAccess.Abstract;
@@ -16,20 +18,16 @@ namespace Business.Concrete
         IUserDal _userDal;
         public UserManager(IUserDal userdal)
         {
-            
+
             _userDal = userdal;
         }
+
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
-            if (user.FirstName.Length > 3 && user.LastName.Length > 2 && user.Email != null && user.Password.Length >= 4)
-            {
-                _userDal.Add(user);
-                return new SuccessResult(UserMessages.UserAdded);
-            }
-            else
-            {
-                return new ErrorResult(UserMessages.UserNameInvalid);
-            }
+            _userDal.Add(user);
+            return new SuccessResult(UserMessages.UserAdded);
+
         }
 
         public IResult Delete(User user)
@@ -50,7 +48,7 @@ namespace Business.Concrete
 
         public IDataResult<List<User>> GetUsersById(int id)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll( u=> u.UserId==id));
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.UserId == id));
         }
 
         public IResult Update(User user)
