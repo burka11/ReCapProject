@@ -12,9 +12,10 @@ namespace Business.ValidationRules.FluentValidation
    public class CarRentalValidator:AbstractValidator<CarRental>
     {
         private ICarRentalDal _rentalDal;
-        public CarRentalValidator()
+        public CarRentalValidator(ICarRentalDal carRentalDal)
         {
-            _rentalDal = new EfCarRentalDal();
+            _rentalDal = carRentalDal;
+           // _rentalDal = new EfCarRentalDal();
             RuleFor(r => r).Must(Returned).WithMessage("Kiralamak istediğiniz araba henüz teslim edilmedi.");
         }
 
