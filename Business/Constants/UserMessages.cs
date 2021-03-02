@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Business.Constants
@@ -13,8 +14,9 @@ namespace Business.Constants
         public static string UserNameInvalid = "Kişi ismi 2 karakterden fazla olmalıdır";
         public static string Maintenance = "Sistem bakımda";
         public static string UsersListed = "Mevcut kişiler Listelendi";
+        public static string AuthorizationDenied = "Yetkiniz yok! ";
 
- 
+
         //public static string CustomerNameInvalid = "Müşteri ismi 2 karakterden fazla olmalıdır";
         //public static string CustomersListed = "Mevcut müşteriler listelendi";
         //public static string CompanyListed = "Mevcut şirkteler listelendi";

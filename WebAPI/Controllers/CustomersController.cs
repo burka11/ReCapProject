@@ -14,6 +14,7 @@ namespace WebAPI.Controllers
     public class CustomersController : ControllerBase
     {
         ICustomerService _customerService;
+
         public CustomersController(ICustomerService customerService)
         {
             _customerService = customerService;
@@ -22,7 +23,6 @@ namespace WebAPI.Controllers
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-
             var result = _customerService.GetAll();
             if (result.Success)
             {
@@ -30,16 +30,18 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
-            var result = _customerService.GetCustomersById(id);
+            var result = _customerService.Get(id);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
+
         [HttpPost("add")]
         public IActionResult Add(Customer customer)
         {
@@ -60,6 +62,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpPost("update")]
         public IActionResult Update(Customer customer)
         {

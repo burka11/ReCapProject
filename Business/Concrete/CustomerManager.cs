@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspect.Autofac.Validation;
@@ -21,6 +22,8 @@ namespace Business.Concrete
         {
             _customerDal = customerDal;
         }
+
+        [SecuredOperation("customer.Add")]
         [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
@@ -28,10 +31,17 @@ namespace Business.Concrete
             return new SuccessResult(CustomerMessages.CustomerAdded);
         }
 
+        [SecuredOperation("customer.Delete")]
         public IResult Delete(Customer customer)
         {
             _customerDal.Delete(customer);
             return new SuccessResult(CustomerMessages.CustomerAdded);
+        }
+
+
+        public IDataResult<Customer> Get(int id)
+        {
+            return new SuccessDataResult<Customer>(_customerDal.Get(p => p.CustomerId == id));
         }
 
         public IDataResult<List<Customer>> GetAll()
@@ -39,27 +49,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
 
-        public IDataResult<List<CustomerDetailDto>> GetCustomerDetails()
-        {
-            return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCustomerDetails());
-        }
-
-        public IDataResult<List<Customer>> GetCustomersById(int id)
-        {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c=> c.CustomerId == id));
-        }
-
+        [SecuredOperation("customer.Update")]
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Update(Customer customer)
         {
-            if (customer.CustomerName.Length > 0)
-            {
-                _customerDal.Update(customer);
-                return new SuccessResult(CustomerMessages.CustomerUpdated);
-            }
-            else
-            {
-                return new ErrorResult(CustomerMessages.CompanyNameInvalid);
-            }
+            _customerDal.Update(customer);
+            return new SuccessResult();
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspect.Autofac.Validation;
+using Core.Entities.Concrete;
 using Core.Results;
 using Core.Results.Abstract;
 using DataAccess.Abstract;
@@ -16,24 +18,30 @@ namespace Business.Concrete
     public class UserManager : IUserService
     {
         IUserDal _userDal;
-        public UserManager(IUserDal userdal)
-        {
 
-            _userDal = userdal;
+        public UserManager(IUserDal userDal)
+        {
+            _userDal = userDal;
         }
 
+        [SecuredOperation("user.Add,ADMIN")]
         [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
             _userDal.Add(user);
-            return new SuccessResult(UserMessages.UserAdded);
-
+            return new SuccessResult();
         }
-
+        [SecuredOperation("user.Delete,ADMIN")]
         public IResult Delete(User user)
         {
             _userDal.Delete(user);
-            return new ErrorResult(UserMessages.UserDeleted);
+            return new SuccessResult();
+        }
+
+        public IDataResult<User> Get(int id)
+        {
+
+            return new SuccessDataResult<User>(_userDal.Get(p => p.Id == id));
         }
 
         public IDataResult<List<User>> GetAll()
@@ -41,27 +49,20 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
         }
 
-        public IDataResult<List<UserDetailDto>> GetUserDetails()
+        public IDataResult<User> GetByMail(string email)
         {
-            return new SuccessDataResult<List<UserDetailDto>>(_userDal.GetUserDetails());
+            return new SuccessDataResult<User>(_userDal.Get(p => p.Email == email));
         }
 
-        public IDataResult<List<User>> GetUsersById(int id)
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.UserId == id));
+            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
         }
-
+        [SecuredOperation("user.Update,ADMIN")]
         public IResult Update(User user)
         {
-            if (user.FirstName.Length > 3 && user.LastName.Length > 2 && user.Email != null && user.Password.Length >= 4)
-            {
-                _userDal.Update(user);
-                return new SuccessResult(UserMessages.UserUpdated);
-            }
-            else
-            {
-                return new ErrorResult(UserMessages.UserNameInvalid);
-            }
+            _userDal.Update(user);
+            return new SuccessResult();
         }
     }
 }
