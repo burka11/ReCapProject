@@ -10,5 +10,6 @@ namespace Business.Constants
         public static string CarNameInvalid = "Marka ismi 2 karakterden fazla olmalıdır";
         public static string Maintenance = "Sistem bakımda";
         public static string CarsListed = "Mevcut markalar Listelendi";
+        public static string BrandUpdated="Marka güncellendi";
     }
 }
